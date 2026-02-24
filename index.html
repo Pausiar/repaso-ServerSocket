@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Repaso ServerSocket</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <div>
+        <h1>☕ Repaso <span class="accent">ServerSocket</span> Java</h1>
+        <p>Completa el código · Corrige · Aprende</p>
+      </div>
+      <div class="score-badge">
+        <span id="score">0</span> / <span id="total">0</span>
+        <small>blancos correctos</small>
+      </div>
+    </div>
+  </header>
+  <div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="cheatsheet">
+    <h2>📋 Cheat Sheet</h2>
+    <section>
+      <h3>🖥️ Servidor</h3>
+      <table>
+        <tr><th>Qué</th><th>Código</th></tr>
+        <tr><td>Iniciar</td><td><code>new ServerSocket(port)</code></td></tr>
+        <tr><td>Aceptar</td><td><code>serverSocket.accept()</code></td></tr>
+        <tr><td>Escritura</td><td><code>new PrintWriter(socket.getOutputStream(), true)</code></td></tr>
+        <tr><td>Lectura</td><td><code>new BufferedReader(new InputStreamReader(socket.getInputStream()))</code></td></tr>
+        <tr><td>Enviar</td><td><code>writer.println(msg)</code></td></tr>
+        <tr><td>Recibir</td><td><code>reader.readLine()</code></td></tr>
+        <tr><td>Cerrar</td><td><code>socket.close()</code></td></tr>
+      </table>
+    </section>
+    <section>
+      <h3>💻 Cliente</h3>
+      <table>
+        <tr><th>Qué</th><th>Código</th></tr>
+        <tr><td>Conectar</td><td><code>new Socket(host, port)</code></td></tr>
+        <tr><td>Escritura</td><td><code>new PrintWriter(socket.getOutputStream(), true)</code></td></tr>
+        <tr><td>Lectura</td><td><code>new BufferedReader(new InputStreamReader(socket.getInputStream()))</code></td></tr>
+        <tr><td>Teclado</td><td><code>new Scanner(System.in)</code></td></tr>
+        <tr><td>Enviar</td><td><code>writer.println(msg)</code></td></tr>
+        <tr><td>Recibir</td><td><code>reader.readLine()</code></td></tr>
+      </table>
+    </section>
+    <section>
+      <h3>🧵 Hilos</h3>
+      <table>
+        <tr><th>Qué</th><th>Código</th></tr>
+        <tr><td>Crear&nbsp;e&nbsp;iniciar</td><td><code>new Thread(()-&gt;{...}).start()</code></td></tr>
+        <tr><td>Virtual</td><td><code>Thread.ofVirtual().start(...)</code></td></tr>
+        <tr><td>Pausar</td><td><code>Thread.sleep(ms)</code></td></tr>
+      </table>
+    </section>
+    <div class="tip"><strong>⚠️ Recuerda cerrar siempre:</strong> ServerSocket, Socket, PrintWriter y BufferedReader. Usa <code>try-with-resources</code> o <code>.close()</code>.</div>
+    <a class="ref-link" href="https://github.com/gerardfp/srvproc/tree/main" target="_blank">📖 Temario completo →</a>
+  </aside>
+  <main>
+
+
+    <!-- ═══ EJERCICIO 1 ═══ -->
+    <article class="exercise" id="ex1">
+      <div class="ex-header">
+        <span class="badge badge-server">Servidor</span>
+        <h2>Ejercicio 1 — Servidor simple</h2>
+        <span class="difficulty">Sin hilos</span>
+      </div>
+      <p class="ex-desc">
+        Completa el servidor que escucha en el puerto <strong>8080</strong>, acepta conexiones,
+        espera 5 segundos y envía <code>"Hola, mundo"</code>. Las conexiones se atienden en serie.
+      </p>
+      <div class="code-block">
+        <div class="code-label">Server.java</div>
+        <pre class="code"><span class="kw">import</span> java.net.*;
+<span class="kw">import</span> java.io.*;
+
+<span class="kw">public class</span> Server {
+    <span class="kw">public static void</span> main(String[] args) <span class="kw">throws</span> Exception {
+
+        <span class="comment">// 1. Iniciar el servidor en el puerto 8080</span>
+        <input class="blank" id="e1-1" data-ans="ServerSocket" size="13" maxlength="20" placeholder="???"/> serverSocket = <span class="kw">new</span> <input class="blank" id="e1-2" data-ans="ServerSocket" size="13" maxlength="20" placeholder="???"/>(8080);
+
+        <span class="kw">while</span> (<span class="lit">true</span>) {
+
+            <span class="comment">// 2. Aceptar una conexión entrante</span>
+            Socket socket = serverSocket.<input class="blank" id="e1-3" data-ans="accept" size="8" maxlength="15" placeholder="???"/>();
+
+            <span class="comment">// 3. Pausar 5 segundos</span>
+            Thread.<input class="blank" id="e1-4" data-ans="sleep" size="6" maxlength="10" placeholder="???"/>(5000);
+
+            <span class="comment">// 4. Abrir writer para enviar datos</span>
+            PrintWriter writer = <span class="kw">new</span> PrintWriter(socket.<input class="blank" id="e1-5" data-ans="getOutputStream" size="15" maxlength="20" placeholder="???"/>(), <span class="lit">true</span>);
+
+            <span class="comment">// 5. Enviar el mensaje</span>
+            writer.<input class="blank" id="e1-6" data-ans="println" size="8" maxlength="15" placeholder="???"/>(<span class="str">"Hola, mundo"</span>);
+
+            <span class="comment">// 6. Cerrar el socket</span>
+            socket.<input class="blank" id="e1-7" data-ans="close" size="6" maxlength="12" placeholder="???"/>();
+        }
+    }
+}</pre>
+      </div>
+      <div class="actions">
+        <button class="btn-check" onclick="checkExercise('ex1')">✅ Corregir</button>
+        <button class="btn-reset" onclick="resetExercise('ex1')">🔄 Limpiar</button>
+        <button class="btn-reveal" onclick="revealExercise('ex1')">👁 Ver solución</button>
+      </div>
+      <div class="feedback" id="fb-ex1"></div>
+    </article>
+
+    <!-- ═══ EJERCICIO 2 ═══ -->
+    <article class="exercise" id="ex2">
+      <div class="ex-header">
+        <span class="badge badge-thread">Hilos</span>
+        <h2>Ejercicio 2 — Servidor con hilos</h2>
+        <span class="difficulty">Con Thread</span>
+      </div>
+      <p class="ex-desc">
+        Modifica el servidor anterior para que cada conexión se maneje en un <strong>hilo independiente</strong>.
+        Así, varios clientes pueden conectarse a la vez sin esperar al anterior.
+      </p>
+      <div class="code-block">
+        <div class="code-label">ServerThread.java</div>
+        <pre class="code"><span class="kw">import</span> java.net.*;
+<span class="kw">import</span> java.io.*;
+
+<span class="kw">public class</span> ServerThread {
+    <span class="kw">public static void</span> main(String[] args) <span class="kw">throws</span> Exception {
+
+        ServerSocket serverSocket = <span class="kw">new</span> ServerSocket(8080);
+
+        <span class="kw">while</span> (<span class="lit">true</span>) {
+
+            <span class="comment">// 1. Aceptar la conexión (hilo principal)</span>
+            Socket socket = serverSocket.<input class="blank" id="e2-1" data-ans="accept" size="8" maxlength="15" placeholder="???"/>();
+
+            <span class="comment">// 2. Crear e iniciar un Thread con lambda</span>
+            <span class="kw">new</span> <input class="blank" id="e2-2" data-ans="Thread" size="6" maxlength="10" placeholder="???"/>(() -&gt; {
+                <span class="kw">try</span> {
+                    Thread.<input class="blank" id="e2-3" data-ans="sleep" size="6" maxlength="10" placeholder="???"/>(5000);
+                    PrintWriter writer = <span class="kw">new</span> PrintWriter(socket.getOutputStream(), <span class="lit">true</span>);
+                    writer.println(<span class="str">"Hola, mundo"</span>);
+                    socket.close();
+                } <span class="kw">catch</span> (Exception e) { e.printStackTrace(); }
+            }).<input class="blank" id="e2-4" data-ans="start" size="6" maxlength="10" placeholder="???"/>();  <span class="comment">// 3. Arrancar el hilo</span>
+        }
+    }
+}</pre>
+      </div>
+      <div class="actions">
+        <button class="btn-check" onclick="checkExercise('ex2')">✅ Corregir</button>
+        <button class="btn-reset" onclick="resetExercise('ex2')">🔄 Limpiar</button>
+        <button class="btn-reveal" onclick="revealExercise('ex2')">👁 Ver solución</button>
+      </div>
+      <div class="feedback" id="fb-ex2"></div>
+    </article>
+
+    <!-- ═══ EJERCICIO 3a — SERVIDOR ═══ -->
+    <article class="exercise" id="ex3s">
+      <div class="ex-header">
+        <span class="badge badge-server">Servidor</span>
+        <h2>Ejercicio 3a — Chat: Servidor</h2>
+        <span class="difficulty">Lectura + Escritura</span>
+      </div>
+      <p class="ex-desc">
+        Servidor de chat: acepta una conexión, lee mensajes con <code>readLine()</code> e imprime por consola.
+        Si recibe <code>"PING"</code> responde <code>"PONG"</code> automáticamente; si no, hace eco: <code>"Echo: " + línea</code>.
+      </p>
+      <div class="code-block">
+        <div class="code-label">ChatServer.java</div>
+        <pre class="code"><span class="kw">import</span> java.net.*;
+<span class="kw">import</span> java.io.*;
+
+<span class="kw">public class</span> ChatServer {
+    <span class="kw">public static void</span> main(String[] args) <span class="kw">throws</span> Exception {
+
+        ServerSocket serverSocket = <span class="kw">new</span> ServerSocket(7000);
+        System.out.println(<span class="str">"Servidor esperando..."</span>);
+
+        <span class="comment">// 1. Aceptar una conexión</span>
+        Socket socket = serverSocket.<input class="blank" id="e3s-1" data-ans="accept" size="8" maxlength="15" placeholder="???"/>();
+
+        <span class="comment">// 2. Abrir lector de datos del socket</span>
+        BufferedReader reader = <span class="kw">new</span> <input class="blank" id="e3s-2" data-ans="BufferedReader" size="14" maxlength="20" placeholder="???"/>(
+            <span class="kw">new</span> InputStreamReader(socket.<input class="blank" id="e3s-3" data-ans="getInputStream" size="14" maxlength="20" placeholder="???"/>()));
+
+        <span class="comment">// 3. Abrir escritor hacia el cliente</span>
+        PrintWriter writer = <span class="kw">new</span> PrintWriter(socket.<input class="blank" id="e3s-4" data-ans="getOutputStream" size="15" maxlength="20" placeholder="???"/>(), <span class="lit">true</span>);
+
+        <span class="comment">// 4. Leer mensajes en bucle</span>
+        String line;
+        <span class="kw">while</span> ((line = reader.<input class="blank" id="e3s-5" data-ans="readLine" size="9" maxlength="15" placeholder="???"/>()) != <span class="lit">null</span>) {
+            System.out.println(<span class="str">"Recibido: "</span> + line);
+            <span class="kw">if</span> (line.equals(<span class="str">"PING"</span>)) {
+                writer.<input class="blank" id="e3s-6" data-ans="println" size="8" maxlength="15" placeholder="???"/>(<span class="str">"PONG"</span>);
+            } <span class="kw">else</span> {
+                writer.println(<span class="str">"Echo: "</span> + line);
+            }
+        }
+        reader.close(); writer.close(); socket.close(); serverSocket.close();
+    }
+}</pre>
+      </div>
+      <div class="actions">
+        <button class="btn-check" onclick="checkExercise('ex3s')">✅ Corregir</button>
+        <button class="btn-reset" onclick="resetExercise('ex3s')">🔄 Limpiar</button>
+        <button class="btn-reveal" onclick="revealExercise('ex3s')">👁 Ver solución</button>
+      </div>
+      <div class="feedback" id="fb-ex3s"></div>
+    </article>
+
+    <!-- ═══ EJERCICIO 3b — CLIENTE ═══ -->
+    <article class="exercise" id="ex3c">
+      <div class="ex-header">
+        <span class="badge badge-client">Cliente</span>
+        <h2>Ejercicio 3b — Chat: Cliente</h2>
+        <span class="difficulty">Conectar + Teclado</span>
+      </div>
+      <p class="ex-desc">
+        El cliente se conecta al servidor de chat, lee del teclado y envía mensajes. Lee y muestra la respuesta del servidor.
+      </p>
+      <div class="code-block">
+        <div class="code-label">ChatClient.java</div>
+        <pre class="code"><span class="kw">import</span> java.net.*;
+<span class="kw">import</span> java.io.*;
+<span class="kw">import</span> java.util.Scanner;
+
+<span class="kw">public class</span> ChatClient {
+    <span class="kw">public static void</span> main(String[] args) <span class="kw">throws</span> Exception {
+
+        <span class="comment">// 1. Conectar al servidor (localhost, puerto 7000)</span>
+        Socket socket = <span class="kw">new</span> <input class="blank" id="e3c-1" data-ans="Socket" size="6" maxlength="12" placeholder="???"/>(<span class="str">"localhost"</span>, 7000);
+
+        <span class="comment">// 2. Abrir lector de respuestas del servidor</span>
+        BufferedReader reader = <span class="kw">new</span> BufferedReader(
+            <span class="kw">new</span> InputStreamReader(socket.<input class="blank" id="e3c-2" data-ans="getInputStream" size="14" maxlength="20" placeholder="???"/>()));
+
+        <span class="comment">// 3. Abrir escritor para enviar mensajes al servidor</span>
+        PrintWriter writer = <span class="kw">new</span> <input class="blank" id="e3c-3" data-ans="PrintWriter" size="11" maxlength="15" placeholder="???"/>(socket.getOutputStream(), <span class="lit">true</span>);
+
+        <span class="comment">// 4. Leer del teclado</span>
+        Scanner scanner = <span class="kw">new</span> <input class="blank" id="e3c-4" data-ans="Scanner" size="8" maxlength="12" placeholder="???"/>(System.in);
+
+        <span class="kw">while</span> (scanner.hasNextLine()) {
+            String msg = scanner.nextLine();
+
+            <span class="comment">// 5. Enviar mensaje al servidor</span>
+            writer.<input class="blank" id="e3c-5" data-ans="println" size="8" maxlength="15" placeholder="???"/>(msg);
+
+            <span class="comment">// 6. Leer y mostrar la respuesta</span>
+            String response = reader.<input class="blank" id="e3c-6" data-ans="readLine" size="9" maxlength="15" placeholder="???"/>();
+            System.out.println(<span class="str">"Servidor: "</span> + response);
+        }
+        reader.close(); writer.close(); socket.close();
+    }
+}</pre>
+      </div>
+      <div class="actions">
+        <button class="btn-check" onclick="checkExercise('ex3c')">✅ Corregir</button>
+        <button class="btn-reset" onclick="resetExercise('ex3c')">🔄 Limpiar</button>
+        <button class="btn-reveal" onclick="revealExercise('ex3c')">👁 Ver solución</button>
+      </div>
+      <div class="feedback" id="fb-ex3c"></div>
+    </article>
+
+    <!-- ═══ SECCIÓN: DESDE CERO ═══ -->
+    <div class="section-divider">
+      <span>✍️ Desde Cero — escribe el código completo</span>
+    </div>
+
+    <!-- DESDE CERO 1 -->
+    <article class="exercise exercise-free" id="exf1">
+      <div class="ex-header">
+        <span class="badge badge-server">Servidor</span>
+        <h2>Desde Cero 1 — Servidor fecha/hora</h2>
+        <span class="difficulty">Sin hilos</span>
+      </div>
+      <p class="ex-desc">
+        Escribe un <strong>servidor completo</strong> en el puerto <strong>9000</strong> que:
+        <br/>1) Acepte conexiones en bucle.<br/>2) Envíe la fecha y hora actual (<code>LocalDateTime.now()</code>) al cliente.<br/>3) Cierre el socket y repita.
+        <br/><em>Recuerda los imports necesarios.</em>
+      </p>
+      <div class="checklist-box">
+        <strong>🗒️ Checklist — ¿Has incluido…?</strong>
+        <label><input type="checkbox" data-free="exf1"/> <code>new ServerSocket(9000)</code></label>
+        <label><input type="checkbox" data-free="exf1"/> bucle <code>while(true)</code></label>
+        <label><input type="checkbox" data-free="exf1"/> <code>serverSocket.accept()</code></label>
+        <label><input type="checkbox" data-free="exf1"/> <code>new PrintWriter(socket.getOutputStream(), true)</code></label>
+        <label><input type="checkbox" data-free="exf1"/> <code>writer.println(LocalDateTime.now())</code></label>
+        <label><input type="checkbox" data-free="exf1"/> <code>socket.close()</code></label>
+      </div>
+      <textarea class="free-textarea" id="ft-exf1" placeholder="// Escribe aquí tu solución completa..."></textarea>
+      <div class="actions">
+        <button class="btn-reset" onclick="document.getElementById('ft-exf1').value='';updateCheckScore('exf1')">🔄 Limpiar</button>
+        <button class="btn-reveal" onclick="toggleSolution('exf1')">👁 Ver solución</button>
+      </div>
+      <div class="solution-panel" id="sol-exf1">
+        <div class="code-label">DateServer.java — solución</div>
+        <pre class="code"><span class="kw">import</span> java.net.*;
+<span class="kw">import</span> java.io.*;
+<span class="kw">import</span> java.time.LocalDateTime;
+
+<span class="kw">public class</span> DateServer {
+    <span class="kw">public static void</span> main(String[] args) <span class="kw">throws</span> Exception {
+        ServerSocket serverSocket = <span class="kw">new</span> ServerSocket(9000);
+        System.out.println(<span class="str">"Servidor fecha/hora escuchando en 9000"</span>);
+
+        <span class="kw">while</span> (<span class="lit">true</span>) {
+            Socket socket = serverSocket.accept();
+            PrintWriter writer = <span class="kw">new</span> PrintWriter(socket.getOutputStream(), <span class="lit">true</span>);
+            writer.println(LocalDateTime.now().toString());
+            socket.close();
+        }
+    }
+}</pre>
+      </div>
+    </article>
+
+    <!-- DESDE CERO 2 -->
+    <article class="exercise exercise-free" id="exf2">
+      <div class="ex-header">
+        <span class="badge badge-thread">Hilos</span>
+        <h2>Desde Cero 2 — Servidor eco en mayúsculas</h2>
+        <span class="difficulty">Con Thread</span>
+      </div>
+      <p class="ex-desc">
+        Escribe un <strong>servidor completo</strong> en el puerto <strong>9001</strong> que:
+        <br/>1) Acepte conexiones en hilo por cada cliente.<br/>2) Lea <strong>una línea</strong> del cliente con <code>readLine()</code>.<br/>3) La devuelva en <strong>mayúsculas</strong> con <code>toUpperCase()</code>.<br/>4) Cierre el socket del cliente en el hilo.
+      </p>
+      <div class="checklist-box">
+        <strong>🗒️ Checklist — ¿Has incluido…?</strong>
+        <label><input type="checkbox" data-free="exf2"/> <code>new ServerSocket(9001)</code></label>
+        <label><input type="checkbox" data-free="exf2"/> <code>serverSocket.accept()</code> en bucle</label>
+        <label><input type="checkbox" data-free="exf2"/> <code>new Thread(()-&gt;{...}).start()</code></label>
+        <label><input type="checkbox" data-free="exf2"/> <code>new BufferedReader(new InputStreamReader(socket.getInputStream()))</code></label>
+        <label><input type="checkbox" data-free="exf2"/> <code>reader.readLine()</code></label>
+        <label><input type="checkbox" data-free="exf2"/> <code>new PrintWriter(socket.getOutputStream(), true)</code></label>
+        <label><input type="checkbox" data-free="exf2"/> <code>writer.println(line.toUpperCase())</code></label>
+        <label><input type="checkbox" data-free="exf2"/> <code>socket.close()</code> dentro del hilo</label>
+      </div>
+      <textarea class="free-textarea" id="ft-exf2" placeholder="// Escribe aquí tu solución completa..."></textarea>
+      <div class="actions">
+        <button class="btn-reset" onclick="document.getElementById('ft-exf2').value='';updateCheckScore('exf2')">🔄 Limpiar</button>
+        <button class="btn-reveal" onclick="toggleSolution('exf2')">👁 Ver solución</button>
+      </div>
+      <div class="solution-panel" id="sol-exf2">
+        <div class="code-label">EchoUpperServer.java — solución</div>
+        <pre class="code"><span class="kw">import</span> java.net.*;
+<span class="kw">import</span> java.io.*;
+
+<span class="kw">public class</span> EchoUpperServer {
+    <span class="kw">public static void</span> main(String[] args) <span class="kw">throws</span> Exception {
+        ServerSocket serverSocket = <span class="kw">new</span> ServerSocket(9001);
+        System.out.println(<span class="str">"Servidor eco escuchando en 9001"</span>);
+
+        <span class="kw">while</span> (<span class="lit">true</span>) {
+            Socket socket = serverSocket.accept();
+
+            <span class="kw">new</span> Thread(() -&gt; {
+                <span class="kw">try</span> {
+                    BufferedReader reader = <span class="kw">new</span> BufferedReader(
+                        <span class="kw">new</span> InputStreamReader(socket.getInputStream()));
+                    PrintWriter writer = <span class="kw">new</span> PrintWriter(socket.getOutputStream(), <span class="lit">true</span>);
+
+                    String line = reader.readLine();
+                    <span class="kw">if</span> (line != <span class="lit">null</span>) {
+                        writer.println(line.toUpperCase());
+                    }
+                    socket.close();
+                } <span class="kw">catch</span> (Exception e) { e.printStackTrace(); }
+            }).start();
+        }
+    }
+}</pre>
+      </div>
+    </article>
+
+    <!-- DESDE CERO 3 -->
+    <article class="exercise exercise-free" id="exf3">
+      <div class="ex-header">
+        <span class="badge badge-client">Cliente</span>
+        <h2>Desde Cero 3 — Cliente completo</h2>
+        <span class="difficulty">Conectar + Teclado + Recibir</span>
+      </div>
+      <p class="ex-desc">
+        Escribe un <strong>cliente completo</strong> que:
+        <br/>1) Se conecte a <code>localhost:9001</code>.<br/>2) Lea una línea del teclado con <code>Scanner</code>.<br/>3) La envíe al servidor.<br/>4) Lea e imprima la respuesta.<br/>5) Cierre todo.
+      </p>
+      <div class="checklist-box">
+        <strong>🗒️ Checklist — ¿Has incluido…?</strong>
+        <label><input type="checkbox" data-free="exf3"/> <code>new Socket("localhost", 9001)</code></label>
+        <label><input type="checkbox" data-free="exf3"/> <code>new PrintWriter(socket.getOutputStream(), true)</code></label>
+        <label><input type="checkbox" data-free="exf3"/> <code>new BufferedReader(new InputStreamReader(socket.getInputStream()))</code></label>
+        <label><input type="checkbox" data-free="exf3"/> <code>new Scanner(System.in)</code></label>
+        <label><input type="checkbox" data-free="exf3"/> <code>scanner.nextLine()</code> + <code>writer.println(...)</code></label>
+        <label><input type="checkbox" data-free="exf3"/> <code>reader.readLine()</code> + imprimir respuesta</label>
+        <label><input type="checkbox" data-free="exf3"/> <code>socket.close()</code></label>
+      </div>
+      <textarea class="free-textarea" id="ft-exf3" placeholder="// Escribe aquí tu solución completa..."></textarea>
+      <div class="actions">
+        <button class="btn-reset" onclick="document.getElementById('ft-exf3').value='';updateCheckScore('exf3')">🔄 Limpiar</button>
+        <button class="btn-reveal" onclick="toggleSolution('exf3')">👁 Ver solución</button>
+      </div>
+      <div class="solution-panel" id="sol-exf3">
+        <div class="code-label">EchoClient.java — solución</div>
+        <pre class="code"><span class="kw">import</span> java.net.*;
+<span class="kw">import</span> java.io.*;
+<span class="kw">import</span> java.util.Scanner;
+
+<span class="kw">public class</span> EchoClient {
+    <span class="kw">public static void</span> main(String[] args) <span class="kw">throws</span> Exception {
+        Socket socket = <span class="kw">new</span> Socket(<span class="str">"localhost"</span>, 9001);
+
+        PrintWriter writer = <span class="kw">new</span> PrintWriter(socket.getOutputStream(), <span class="lit">true</span>);
+        BufferedReader reader = <span class="kw">new</span> BufferedReader(
+            <span class="kw">new</span> InputStreamReader(socket.getInputStream()));
+        Scanner scanner = <span class="kw">new</span> Scanner(System.in);
+
+        System.out.print(<span class="str">"Escribe un mensaje: "</span>);
+        String msg = scanner.nextLine();
+        writer.println(msg);
+
+        String response = reader.readLine();
+        System.out.println(<span class="str">"Servidor respondió: "</span> + response);
+
+        reader.close();
+        writer.close();
+        socket.close();
+    }
+}</pre>
+      </div>
+    </article>
+
+  </main>
+  </div>
+
+  <footer>
+    <p>Repaso ServerSocket — Ejercicios 1–3 &nbsp;·&nbsp; <a href="https://github.com/gerardfp/srvproc/tree/main" target="_blank">Temario completo</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
