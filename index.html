@@ -439,11 +439,284 @@
       </div>
     </article>
 
+    <!-- ═══ SECCIÓN: PRÁCTICA PARA EXAMEN ═══ -->
+    <div class="section-divider">
+      <span>📝 Práctica para examen — ejercicios tipo prueba real</span>
+    </div>
+
+    <!-- EXAMEN 1 — CONVERSOR (SERVIDOR) -->
+    <article class="exercise exercise-free" id="exam1s">
+      <div class="ex-header">
+        <span class="badge badge-server">Servidor</span>
+        <h2>Examen 1a — Conversor de temperaturas (Servidor)</h2>
+        <span class="difficulty">Puerto 9090 · Multi-cliente</span>
+      </div>
+      <p class="ex-desc">
+        Servidor que escucha en el puerto <strong>9090</strong>. Recibe una temperatura en °C del cliente
+        y responde con su equivalente en °F (<code>F = C × 9/5 + 32</code>).
+        El cliente puede enviar <strong>varias temperaturas seguidas</strong>; si envía <code>salir</code>,
+        el servidor cierra esa conexión y vuelve a esperar a otro cliente.
+        Atiende varios clientes a la vez con <strong>hilos</strong>.
+      </p>
+      <div class="checklist-box">
+        <strong>🗒️ Checklist — ¿Has incluido…?</strong>
+        <label><input type="checkbox" data-free="exam1s"/> <code>new ServerSocket(9090)</code></label>
+        <label><input type="checkbox" data-free="exam1s"/> <code>while(true) { serverSocket.accept() }</code></label>
+        <label><input type="checkbox" data-free="exam1s"/> <code>new Thread(() -&gt; {...}).start()</code> por cliente</label>
+        <label><input type="checkbox" data-free="exam1s"/> <code>BufferedReader</code> + <code>PrintWriter</code> del socket</label>
+        <label><input type="checkbox" data-free="exam1s"/> bucle <code>while ((linea = reader.readLine()) != null)</code></label>
+        <label><input type="checkbox" data-free="exam1s"/> Si <code>linea.equals("salir")</code> &rarr; <code>break</code></label>
+        <label><input type="checkbox" data-free="exam1s"/> <code>Double.parseDouble(linea)</code> y fórmula <code>c*9/5+32</code></label>
+        <label><input type="checkbox" data-free="exam1s"/> <code>writer.println(fahrenheit)</code></label>
+        <label><input type="checkbox" data-free="exam1s"/> <code>socket.close()</code> al salir del bucle</label>
+      </div>
+      <textarea class="free-textarea" id="ft-exam1s" placeholder="// Escribe aquí tu ConversionServidor.java..."></textarea>
+      <div class="actions">
+        <button class="btn-reset" onclick="document.getElementById('ft-exam1s').value='';updateCheckScore('exam1s')">🔄 Limpiar</button>
+        <button class="btn-reveal" onclick="toggleSolution('exam1s')">👁 Ver solución</button>
+      </div>
+      <div class="solution-panel" id="sol-exam1s">
+        <div class="code-label">ConversionServidor.java — solución</div>
+        <pre class="code"><span class="kw">import</span> java.net.*;
+<span class="kw">import</span> java.io.*;
+
+<span class="kw">public class</span> ConversionServidor {
+    <span class="kw">public static void</span> main(String[] args) <span class="kw">throws</span> Exception {
+        ServerSocket serverSocket = <span class="kw">new</span> ServerSocket(9090);
+        System.out.println(<span class="str">"Servidor de conversión escuchando en 9090"</span>);
+
+        <span class="kw">while</span> (<span class="lit">true</span>) {
+            Socket socket = serverSocket.accept();
+
+            <span class="kw">new</span> Thread(() -&gt; {
+                <span class="kw">try</span> {
+                    BufferedReader reader = <span class="kw">new</span> BufferedReader(
+                        <span class="kw">new</span> InputStreamReader(socket.getInputStream()));
+                    PrintWriter writer = <span class="kw">new</span> PrintWriter(socket.getOutputStream(), <span class="lit">true</span>);
+
+                    String linea;
+                    <span class="kw">while</span> ((linea = reader.readLine()) != <span class="lit">null</span>) {
+                        <span class="kw">if</span> (linea.equalsIgnoreCase(<span class="str">"salir"</span>)) <span class="kw">break</span>;
+                        <span class="kw">try</span> {
+                            <span class="kw">double</span> c = Double.parseDouble(linea.trim());
+                            <span class="kw">double</span> f = c * 9.0 / 5.0 + 32.0;
+                            writer.println(f);
+                        } <span class="kw">catch</span> (NumberFormatException e) {
+                            writer.println(<span class="str">"ERROR"</span>);
+                        }
+                    }
+                    socket.close();
+                } <span class="kw">catch</span> (Exception e) { e.printStackTrace(); }
+            }).start();
+        }
+    }
+}</pre>
+      </div>
+    </article>
+
+    <!-- EXAMEN 1 — CONVERSOR (CLIENTE) -->
+    <article class="exercise exercise-free" id="exam1c">
+      <div class="ex-header">
+        <span class="badge badge-client">Cliente</span>
+        <h2>Examen 1b — Conversor de temperaturas (Cliente)</h2>
+        <span class="difficulty">Teclado + bucle</span>
+      </div>
+      <p class="ex-desc">
+        Cliente que se conecta a <code>localhost:9090</code>. Pide por teclado una temperatura en °C
+        (o la palabra <code>salir</code>), la envía al servidor y muestra el resultado en °F.
+        Repite hasta que el usuario escriba <code>salir</code>.
+      </p>
+      <div class="checklist-box">
+        <strong>🗒️ Checklist — ¿Has incluido…?</strong>
+        <label><input type="checkbox" data-free="exam1c"/> <code>new Socket("localhost", 9090)</code></label>
+        <label><input type="checkbox" data-free="exam1c"/> <code>PrintWriter</code> + <code>BufferedReader</code> del socket</label>
+        <label><input type="checkbox" data-free="exam1c"/> <code>new Scanner(System.in)</code> para leer teclado</label>
+        <label><input type="checkbox" data-free="exam1c"/> Bucle <code>while(true)</code> pidiendo temperatura</label>
+        <label><input type="checkbox" data-free="exam1c"/> <code>writer.println(entrada)</code></label>
+        <label><input type="checkbox" data-free="exam1c"/> Si <code>entrada.equals("salir")</code> &rarr; <code>break</code></label>
+        <label><input type="checkbox" data-free="exam1c"/> <code>reader.readLine()</code> y mostrar resultado en °F</label>
+        <label><input type="checkbox" data-free="exam1c"/> Cerrar <code>socket</code></label>
+      </div>
+      <textarea class="free-textarea" id="ft-exam1c" placeholder="// Escribe aquí tu ConversionCliente.java..."></textarea>
+      <div class="actions">
+        <button class="btn-reset" onclick="document.getElementById('ft-exam1c').value='';updateCheckScore('exam1c')">🔄 Limpiar</button>
+        <button class="btn-reveal" onclick="toggleSolution('exam1c')">👁 Ver solución</button>
+      </div>
+      <div class="solution-panel" id="sol-exam1c">
+        <div class="code-label">ConversionCliente.java — solución</div>
+        <pre class="code"><span class="kw">import</span> java.net.*;
+<span class="kw">import</span> java.io.*;
+<span class="kw">import</span> java.util.Scanner;
+
+<span class="kw">public class</span> ConversionCliente {
+    <span class="kw">public static void</span> main(String[] args) <span class="kw">throws</span> Exception {
+        Socket socket = <span class="kw">new</span> Socket(<span class="str">"localhost"</span>, 9090);
+        PrintWriter writer = <span class="kw">new</span> PrintWriter(socket.getOutputStream(), <span class="lit">true</span>);
+        BufferedReader reader = <span class="kw">new</span> BufferedReader(
+            <span class="kw">new</span> InputStreamReader(socket.getInputStream()));
+        Scanner sc = <span class="kw">new</span> Scanner(System.in);
+
+        System.out.println(<span class="str">"Conectado al servidor."</span>);
+        <span class="kw">while</span> (<span class="lit">true</span>) {
+            System.out.print(<span class="str">"Introduce temperatura en °C (o \"salir\"): "</span>);
+            String entrada = sc.nextLine();
+            writer.println(entrada);
+
+            <span class="kw">if</span> (entrada.equalsIgnoreCase(<span class="str">"salir"</span>)) {
+                System.out.println(<span class="str">"Desconectado."</span>);
+                <span class="kw">break</span>;
+            }
+            String resp = reader.readLine();
+            <span class="kw">if</span> (resp == <span class="lit">null</span>) <span class="kw">break</span>;
+            System.out.println(<span class="str">"Resultado: "</span> + resp + <span class="str">" °F"</span>);
+        }
+        socket.close();
+    }
+}</pre>
+      </div>
+    </article>
+
+    <!-- EXAMEN 2 — ADIVINAR NÚMERO (SERVIDOR) -->
+    <article class="exercise exercise-free" id="exam2s">
+      <div class="ex-header">
+        <span class="badge badge-thread">Hilos</span>
+        <h2>Examen 2a — Adivina el número (Servidor)</h2>
+        <span class="difficulty">Puerto 8080 · Partida por cliente</span>
+      </div>
+      <p class="ex-desc">
+        Servidor en el puerto <strong>8080</strong>. Cada cliente que se conecta juega su propia partida
+        en un <strong>hilo</strong>. Al conectarse, el servidor genera un número aleatorio entre 1 y 100
+        y envía <code>"Adivina un número entre 1 y 100"</code>. Por cada intento responde:
+        <br/>· <code>MAYOR</code> si el secreto es mayor que el enviado.
+        <br/>· <code>MENOR</code> si el secreto es menor.
+        <br/>· <code>ACERTASTE en X intentos</code> al acertar (y cierra la conexión).
+      </p>
+      <div class="checklist-box">
+        <strong>🗒️ Checklist — ¿Has incluido…?</strong>
+        <label><input type="checkbox" data-free="exam2s"/> <code>new ServerSocket(8080)</code></label>
+        <label><input type="checkbox" data-free="exam2s"/> <code>while(true) { accept(); new Thread(...).start(); }</code></label>
+        <label><input type="checkbox" data-free="exam2s"/> Número aleatorio: <code>new Random().nextInt(100) + 1</code></label>
+        <label><input type="checkbox" data-free="exam2s"/> Enviar <code>"Adivina un número entre 1 y 100"</code></label>
+        <label><input type="checkbox" data-free="exam2s"/> Bucle leyendo intentos con <code>readLine()</code></label>
+        <label><input type="checkbox" data-free="exam2s"/> Contador <code>intentos++</code> por iteración</label>
+        <label><input type="checkbox" data-free="exam2s"/> Responder <code>MAYOR</code> / <code>MENOR</code> / <code>ACERTASTE en X intentos</code></label>
+        <label><input type="checkbox" data-free="exam2s"/> <code>socket.close()</code> al acertar</label>
+      </div>
+      <textarea class="free-textarea" id="ft-exam2s" placeholder="// Escribe aquí tu Servidor.java..."></textarea>
+      <div class="actions">
+        <button class="btn-reset" onclick="document.getElementById('ft-exam2s').value='';updateCheckScore('exam2s')">🔄 Limpiar</button>
+        <button class="btn-reveal" onclick="toggleSolution('exam2s')">👁 Ver solución</button>
+      </div>
+      <div class="solution-panel" id="sol-exam2s">
+        <div class="code-label">Servidor.java — solución</div>
+        <pre class="code"><span class="kw">import</span> java.net.*;
+<span class="kw">import</span> java.io.*;
+<span class="kw">import</span> java.util.Random;
+
+<span class="kw">public class</span> Servidor {
+    <span class="kw">public static void</span> main(String[] args) <span class="kw">throws</span> Exception {
+        ServerSocket serverSocket = <span class="kw">new</span> ServerSocket(8080);
+        System.out.println(<span class="str">"Servidor adivinanza escuchando en 8080"</span>);
+
+        <span class="kw">while</span> (<span class="lit">true</span>) {
+            Socket socket = serverSocket.accept();
+
+            <span class="kw">new</span> Thread(() -&gt; {
+                <span class="kw">try</span> {
+                    BufferedReader reader = <span class="kw">new</span> BufferedReader(
+                        <span class="kw">new</span> InputStreamReader(socket.getInputStream()));
+                    PrintWriter writer = <span class="kw">new</span> PrintWriter(socket.getOutputStream(), <span class="lit">true</span>);
+
+                    <span class="kw">int</span> secreto = <span class="kw">new</span> Random().nextInt(100) + 1;
+                    <span class="kw">int</span> intentos = 0;
+                    writer.println(<span class="str">"Adivina un número entre 1 y 100"</span>);
+
+                    String linea;
+                    <span class="kw">while</span> ((linea = reader.readLine()) != <span class="lit">null</span>) {
+                        <span class="kw">int</span> n = Integer.parseInt(linea.trim());
+                        intentos++;
+                        <span class="kw">if</span> (n &lt; secreto)      writer.println(<span class="str">"MAYOR"</span>);
+                        <span class="kw">else if</span> (n &gt; secreto) writer.println(<span class="str">"MENOR"</span>);
+                        <span class="kw">else</span> {
+                            writer.println(<span class="str">"ACERTASTE en "</span> + intentos + <span class="str">" intentos"</span>);
+                            <span class="kw">break</span>;
+                        }
+                    }
+                    socket.close();
+                } <span class="kw">catch</span> (Exception e) { e.printStackTrace(); }
+            }).start();
+        }
+    }
+}</pre>
+      </div>
+    </article>
+
+    <!-- EXAMEN 2 — ADIVINAR NÚMERO (CLIENTE) -->
+    <article class="exercise exercise-free" id="exam2c">
+      <div class="ex-header">
+        <span class="badge badge-client">Cliente</span>
+        <h2>Examen 2b — Adivina el número (Cliente)</h2>
+        <span class="difficulty">Teclado + bucle</span>
+      </div>
+      <p class="ex-desc">
+        Cliente que se conecta a <code>localhost:8080</code>. Muestra el mensaje inicial del servidor,
+        pide un número por teclado, lo envía y muestra la respuesta. Termina cuando recibe
+        una línea que empieza por <code>ACERTASTE</code>.
+      </p>
+      <div class="checklist-box">
+        <strong>🗒️ Checklist — ¿Has incluido…?</strong>
+        <label><input type="checkbox" data-free="exam2c"/> <code>new Socket("localhost", 8080)</code></label>
+        <label><input type="checkbox" data-free="exam2c"/> <code>BufferedReader</code> + <code>PrintWriter</code> del socket</label>
+        <label><input type="checkbox" data-free="exam2c"/> <code>new Scanner(System.in)</code></label>
+        <label><input type="checkbox" data-free="exam2c"/> Mostrar primer <code>reader.readLine()</code> (mensaje inicial)</label>
+        <label><input type="checkbox" data-free="exam2c"/> Bucle: leer teclado &rarr; <code>writer.println(numero)</code></label>
+        <label><input type="checkbox" data-free="exam2c"/> <code>reader.readLine()</code> tras cada envío</label>
+        <label><input type="checkbox" data-free="exam2c"/> Si respuesta empieza por <code>"ACERTASTE"</code> &rarr; <code>break</code></label>
+        <label><input type="checkbox" data-free="exam2c"/> <code>socket.close()</code></label>
+      </div>
+      <textarea class="free-textarea" id="ft-exam2c" placeholder="// Escribe aquí tu Cliente.java..."></textarea>
+      <div class="actions">
+        <button class="btn-reset" onclick="document.getElementById('ft-exam2c').value='';updateCheckScore('exam2c')">🔄 Limpiar</button>
+        <button class="btn-reveal" onclick="toggleSolution('exam2c')">👁 Ver solución</button>
+      </div>
+      <div class="solution-panel" id="sol-exam2c">
+        <div class="code-label">Cliente.java — solución</div>
+        <pre class="code"><span class="kw">import</span> java.net.*;
+<span class="kw">import</span> java.io.*;
+<span class="kw">import</span> java.util.Scanner;
+
+<span class="kw">public class</span> Cliente {
+    <span class="kw">public static void</span> main(String[] args) <span class="kw">throws</span> Exception {
+        Socket socket = <span class="kw">new</span> Socket(<span class="str">"localhost"</span>, 8080);
+        BufferedReader reader = <span class="kw">new</span> BufferedReader(
+            <span class="kw">new</span> InputStreamReader(socket.getInputStream()));
+        PrintWriter writer = <span class="kw">new</span> PrintWriter(socket.getOutputStream(), <span class="lit">true</span>);
+        Scanner sc = <span class="kw">new</span> Scanner(System.in);
+
+        System.out.println(<span class="str">"Conectado al servidor."</span>);
+        System.out.println(reader.readLine()); <span class="comment">// "Adivina un número entre 1 y 100"</span>
+
+        <span class="kw">while</span> (<span class="lit">true</span>) {
+            System.out.print(<span class="str">"Tu número: "</span>);
+            String entrada = sc.nextLine();
+            writer.println(entrada);
+
+            String resp = reader.readLine();
+            <span class="kw">if</span> (resp == <span class="lit">null</span>) <span class="kw">break</span>;
+            System.out.println(resp);
+            <span class="kw">if</span> (resp.startsWith(<span class="str">"ACERTASTE"</span>)) <span class="kw">break</span>;
+        }
+        socket.close();
+    }
+}</pre>
+      </div>
+    </article>
+
   </main>
   </div>
 
   <footer>
-    <p>Repaso ServerSocket — Ejercicios 1–3 &nbsp;·&nbsp; <a href="https://github.com/gerardfp/srvproc/tree/main" target="_blank">Temario completo</a></p>
+    <p>Repaso ServerSocket — Ejercicios 1–3 + Práctica examen &nbsp;·&nbsp; <a href="https://github.com/gerardfp/srvproc/tree/main" target="_blank">Temario completo</a></p>
   </footer>
 
   <script src="script.js"></script>
