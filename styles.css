@@ -84,6 +84,76 @@ table code { background: var(--code-bg); color: #79c0ff; padding: 1px 4px; borde
 /* ===== MAIN ===== */
 main { padding: 20px; display: flex; flex-direction: column; gap: 24px; }
 
+.exam-focus {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 18px;
+  padding: 22px;
+  border: 1px solid #7c5a16;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at top left, rgba(227, 179, 65, 0.18), transparent 38%),
+    linear-gradient(135deg, #241700 0%, #17120b 55%, #111722 100%);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.24);
+}
+
+.exam-kicker {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(227, 179, 65, 0.16);
+  color: #ffd166;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.exam-focus h2 {
+  font-size: 1.55rem;
+  line-height: 1.2;
+  margin-bottom: 10px;
+  color: #fff6d6;
+}
+
+.exam-focus p {
+  color: #d5dbe4;
+  font-size: .94rem;
+  max-width: 65ch;
+}
+
+.exam-focus-links {
+  display: grid;
+  gap: 10px;
+  align-content: center;
+}
+
+.exam-focus-links a {
+  display: block;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 209, 102, 0.2);
+  border-radius: 10px;
+  background: rgba(12, 17, 23, 0.52);
+  color: #fff1bf;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform .15s ease, border-color .15s ease, background .15s ease;
+}
+
+.exam-focus-links a:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 209, 102, 0.5);
+  background: rgba(12, 17, 23, 0.75);
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  .exam-focus {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ===== EXERCISE CARD ===== */
 .exercise {
   background: var(--card);
